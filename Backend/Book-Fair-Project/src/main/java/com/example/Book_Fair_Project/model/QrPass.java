@@ -1,4 +1,4 @@
-package com.example.BookFairpro.model;
+package com.example.Book_Fair_Project.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
