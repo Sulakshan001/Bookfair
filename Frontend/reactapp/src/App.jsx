@@ -7,6 +7,7 @@ import Navbar from './Components/common/Navbar';
 import Footer from './Components/common/Footer';
 import About from './Components/pages/About';
 import Service from "./Components/pages/Service";
+import Contact from "./Components/pages/Contact";
 
 function PublicLayout() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/" element={<PublicLayout />}>
           <Route path="/about" element={<About />} />
           <Route path="/service" element={<Service />} />
+          <Route path="/contact" element={<Contact />} />
           
         </Route>
       </Routes>
