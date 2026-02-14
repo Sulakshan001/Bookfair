@@ -5,6 +5,7 @@ import './App.css'
 import { Routes, Route, Outlet, BrowserRouter } from "react-router-dom";
 import Navbar from './Components/common/Navbar';
 import Footer from './Components/common/Footer';
+import About from './Components/pages/About';
 
 function PublicLayout() {
   return (
@@ -19,13 +20,14 @@ function PublicLayout() {
 
 
 function App() {
-  
+
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<PublicLayout />}>
-         
+          <Route path="/about" element={<About />} />
+          
         </Route>
       </Routes>
     </BrowserRouter>
