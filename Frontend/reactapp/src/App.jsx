@@ -12,6 +12,7 @@ import Signin from "./Components/pages/Signin";
 import UserAccountApi from './services/UserAccountApi';
 import Authentication from './services/Authentication';
 import { FaSignInAlt } from 'react-icons/fa';
+import Signup from "./Components/pages/Signup";
 
 function PublicLayout() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route path="/service" element={<Service />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/sign-in" element={<Signin />} />
+          <Route path="/sign-up" element={<Signup />} />
           
         </Route>
       </Routes>
