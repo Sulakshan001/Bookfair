@@ -5,46 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b43e71f-6130-426c-8e2b-2caff615c82e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/dto/reservation/ReservationCreateRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/dto/reservation/ReservationItemResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/dto/reservation/ReservationResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/dto/stall/StallCreateRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/dto/stall/StallResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/dto/stall/StallUpdateRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/repository/ReservationRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/repository/StallRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/dto/auth/AuthResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/dto/auth/AuthResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/dto/auth/RegisterRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/dto/auth/RegisterRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/dto/common/ApiResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/dto/common/ApiResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/EmailNotification$EmailStatus.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/EmailNotification$EmailStatus.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/EmailNotification$EmailType.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/EmailNotification$EmailType.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/EmailNotification.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/EmailNotification.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/Payment$PaymentMethod.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/Payment$PaymentMethod.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/Payment$PaymentStatus.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/Payment$PaymentStatus.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/Payment.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/Payment.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/model/Stall.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/model/Stall.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/Stall$Size.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/Stall$Size.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/Stall$Status.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/Stall$Status.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/Stall.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/Stall.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/UserOtp$OtpType.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/UserOtp$OtpType.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/UserOtp.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/UserOtp.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/repository/EmailNotificationRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/repository/EmailNotificationRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/service/MailService.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/service/MailService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/service/MailServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/service/MailServiceImpl.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Interface" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="39fgemgzouKXtuRXEVYqhqPrCVu" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -54,7 +43,7 @@
     "Application.BookFairProjectApplication.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Merging main",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/Daya/OneDrive - University of Kelaniya/Desktop/Bookfair final/Bookfair"
   }
