@@ -8,6 +8,10 @@ import Footer from './Components/common/Footer';
 import About from './Components/pages/About';
 import Service from "./Components/pages/Service";
 import Contact from "./Components/pages/Contact";
+import Signin from "./Components/pages/Signin";
+import UserAccountApi from './services/UserAccountApi';
+import Authentication from './services/Authentication';
+import { FaSignInAlt } from 'react-icons/fa';
 
 function PublicLayout() {
   return (
@@ -31,6 +35,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/service" element={<Service />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/sign-in" element={<Signin />} />
           
         </Route>
       </Routes>
