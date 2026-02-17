@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default class Authentication {
-  static BASE_URL = "http://localhost:8088";
+  static BASE_URL = "http://localhost:8080";
 
   static async login(credentials) {
     const response = await axios.post(
