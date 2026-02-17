@@ -5,6 +5,7 @@ import './App.css'
 import { Routes, Route, Outlet, BrowserRouter } from "react-router-dom";
 import Navbar from './Components/common/Navbar';
 import Footer from './Components/common/Footer';
+import HomePage from "./Components/pages/Home";
 import About from './Components/pages/About';
 import Service from "./Components/pages/Service";
 import Contact from "./Components/pages/Contact";
@@ -13,6 +14,7 @@ import UserAccountApi from './services/UserAccountApi';
 import Authentication from './services/Authentication';
 import { FaSignInAlt } from 'react-icons/fa';
 import Signup from "./Components/pages/Signup";
+
 
 function PublicLayout() {
   return (
@@ -33,6 +35,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<PublicLayout />}>
+         <Route path="/" element={<HomePage />} />
+          <Route path="/home" element={<HomePage />} />
           <Route path="/about" element={<About />} />
           <Route path="/service" element={<Service />} />
           <Route path="/contact" element={<Contact />} />
