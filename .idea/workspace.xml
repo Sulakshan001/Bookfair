@@ -6,9 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="4b43e71f-6130-426c-8e2b-2caff615c82e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,12 +32,12 @@
     &quot;assignee&quot;: &quot;amillthan&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Sulakshan001/Bookfair.git&quot;,
-    &quot;accountId&quot;: &quot;2a3f26c8-0aab-46cd-b9ff-c82b0e57fbde&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Sulakshan001/Bookfair.git",
+    "accountId": "7d93ebb3-6fe9-48a2-aab9-a22997c66b1a"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
@@ -49,17 +49,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.BookFairProjectApplication.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Amillthan",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/amill/Desktop/ColomboBookFair/Bookfair"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.BookFairProjectApplication.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Sulakshan&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/amill/Desktop/ColomboBookFair/Bookfair&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
