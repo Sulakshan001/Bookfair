@@ -1,4 +1,4 @@
-package com.example.Book_Fair_Project.dto.chechout;
+package com.example.Book_Fair_Project.dto.checkout;
 
 import jakarta.validation.constraints.NotNull;
 

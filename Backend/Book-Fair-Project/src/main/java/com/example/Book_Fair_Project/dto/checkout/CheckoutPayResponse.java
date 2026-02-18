@@ -1,4 +1,4 @@
-package com.example.Book_Fair_Project.dto.chechout;
+package com.example.Book_Fair_Project.dto.checkout;
 
 public class CheckoutPayResponse {
     private Long paymentId;
