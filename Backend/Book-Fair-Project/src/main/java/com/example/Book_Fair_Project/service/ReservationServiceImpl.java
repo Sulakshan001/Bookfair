@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -136,21 +137,42 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     private void sendReservationConfirmationEmail(User user, Reservation reservation) {
-        String subject = "Reservation Confirmed - BookFairPro";
-        String body = "Hello " + user.getName() + ",\n\n"
-                + "Your reservation has been confirmed!\n"
-                + "Reservation ID: " + reservation.getReservationId() + "\n"
-                + "QR ID: " + reservation.getQrId() + "\n"
-                + "Total Stalls: " + reservation.getReservationStalls().size() + "\n\n"
-                + "Please keep your QR ID for entry.\n\n"
-                + "BookFairPro Team";
+        String subject = "Reservation pending - BookFair";
 
-        mailService.sendAndLog(user, reservation,
-                EmailNotification.EmailType.RESERVATION_CONFIRMATION, subject, body);
+        String qrText = reservation.getQrId(); // ✅ encode this (or a URL)
+
+        // ✅ Generate PNG bytes
+        byte[] qrPng = MailServiceImpl.generateQrPng(qrText, 260);
+
+        String html = ""
+                + "<div style='font-family:Arial,sans-serif;line-height:1.5'>"
+                + "<h2>Reservation Confirmed!</h2>"
+                + "<p>Hello <b>" + user.getName() + "</b>,</p>"
+                + "<p>Your reservation is currently pending approval.</p>\n"
+                + "<ul>"
+                + "  <li><b>Reservation ID:</b> " + reservation.getReservationId() + "</li>"
+                + "  <li><b>QR ID:</b> " + reservation.getQrId() + "</li>"
+                + "  <li><b>Total Stalls:</b> " + reservation.getReservationStalls().size() + "</li>"
+                + "</ul>"
+                + "<p><b>Your QR Code:</b></p>"
+                + "<img src='cid:qrImage' style='width:260px;height:260px;border:1px solid #ddd;padding:8px;border-radius:10px'/>"
+                + "<p>Please keep this QR code for entry.</p>"
+                + "<p style='margin-top:24px'>BookFairPro Team</p>"
+                + "</div>";
+
+        // ✅ Send HTML + inline QR image
+        mailService.sendAndLogHtmlInline(
+                user,
+                reservation,
+                EmailNotification.EmailType.RESERVATION_CONFIRMATION,
+                subject,
+                html,
+                Map.of("qrImage", qrPng)
+        );
     }
 
     private void sendReservationCancellationEmail(User user, Reservation reservation) {
-        String subject = "Reservation Cancelled - BookFairPro";
+        String subject = "Reservation Cancelled - BookFair";
         String body = "Hello " + user.getName() + ",\n\n"
                 + "Your reservation has been cancelled.\n"
                 + "Reservation ID: " + reservation.getReservationId() + "\n\n"
