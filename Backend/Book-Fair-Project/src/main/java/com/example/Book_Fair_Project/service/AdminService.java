@@ -21,6 +21,8 @@ public interface AdminService {
 
     UserResponse getUserById(Long userId);
 
+
+
     UserResponse updateUserRole(Long userId, String newRole);
 
     void deleteUser(Long userId);
@@ -29,6 +31,8 @@ public interface AdminService {
 
     // ========== STALL MANAGEMENT ==========
     List<StallResponse> getAllStalls();
+
+    StallResponse createStall(StallResponse stallResponse);
 
     StallResponse updateStallStatus(Long stallId, String status);
 

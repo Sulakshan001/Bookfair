@@ -40,6 +40,10 @@ const AdminReservations = () => {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedReservation, setSelectedReservation] = useState(null);
+  const [showStallsModal, setShowStallsModal] = useState(false);
+  const [stallsForReservation, setStallsForReservation] = useState([]);
+  const [stallsLoading, setStallsLoading] = useState(false);
+  const [stallsError, setStallsError] = useState(null);
 
   // Notification
   const [notification, setNotification] = useState(null);
@@ -139,6 +143,23 @@ const AdminReservations = () => {
     } catch (err) {
       console.error("Error sending confirmation email:", err);
       showNotification("Failed to send confirmation email", "error");
+    }
+  };
+
+  const fetchStallsForReservation = async (reservationId) => {
+    try {
+      setStallsLoading(true);
+      setStallsError(null);
+      const data = await Admin.getReservationById(reservationId);
+      // backend may return either a single `stall` or an array `stalls`
+      const stalls = data?.stalls ?? (data?.stall ? [data.stall] : []);
+      setStallsForReservation(stalls);
+    } catch (err) {
+      console.error("Error fetching reservation details:", err);
+      setStallsError("Failed to load stalls for this reservation.");
+      setStallsForReservation([]);
+    } finally {
+      setStallsLoading(false);
     }
   };
 
@@ -296,6 +317,9 @@ const AdminReservations = () => {
                       Stall
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                      Stall Count
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                       Date & Time
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
@@ -309,54 +333,68 @@ const AdminReservations = () => {
                 <tbody className="bg-gray-800/40 divide-y divide-gray-700/50">
                   {filteredReservations.length === 0 ? (
                     <tr>
-                      <td colSpan="6" className="px-6 py-12 text-center text-gray-400">
+                      <td colSpan="7" className="px-6 py-12 text-center text-gray-400">
                         No reservations found matching your criteria.
                       </td>
                     </tr>
                   ) : (
-                    filteredReservations.map((reservation) => (
-                      <tr key={reservation.id} className="hover:bg-gray-700/30">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="flex-shrink-0">
-                              <Calendar className="w-8 h-8 text-gray-400" />
-                            </div>
-                            <div className="ml-4">
-                              <div className="text-sm font-medium text-white">
-                                #{reservation.id}
+                    filteredReservations.map((reservation, _idx) => (
+                      <tr key={reservation.id ?? `reservation-${_idx}-${reservation.createdAt ?? ''}`} className="hover:bg-gray-700/30">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0">
+                                <Calendar className="w-8 h-8 text-gray-400" />
                               </div>
-                              <div className="text-sm text-gray-400">
-                                ${reservation.totalAmount?.toFixed(2) || "0.00"}
+                              <div className="ml-4">
+                                <div className="text-sm font-medium text-white">#{reservation.id}</div>
+                                <div className="text-sm text-gray-400">{reservation.title ?? reservation.description ?? "Reservation"}</div>
+                                <div className="text-sm text-gray-400">Created: {formatDateTime(reservation.createdAt)}</div>
                               </div>
                             </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <User className="w-4 h-4 text-gray-400 mr-2" />
-                            <div>
-                              <div className="text-sm font-medium text-white">
-                                {reservation.customerName || "N/A"}
-                              </div>
-                              <div className="text-sm text-gray-400">
-                                {reservation.customerEmail || ""}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <User className="w-4 h-4 text-gray-400 mr-2" />
+                              <div>
+                                <div className="text-sm font-medium text-white">{reservation.user?.fullName ?? reservation.customerName ?? "N/A"}</div>
+                                <div className="text-sm text-gray-400">ID: {reservation.user?.id ?? reservation.customerId ?? "-"}</div>
+                                <div className="text-sm text-gray-400">{reservation.user?.email ?? reservation.customerEmail ?? ""}</div>
                               </div>
                             </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <MapPin className="w-4 h-4 text-gray-400 mr-2" />
-                            <div>
-                              <div className="text-sm font-medium text-white">
-                                {reservation.stallName || "N/A"}
-                              </div>
-                              <div className="text-sm text-gray-400">
-                                {reservation.stallLocation || ""}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <MapPin className="w-4 h-4 text-gray-400 mr-2" />
+                              <div>
+                                <div className="text-sm font-medium text-white">{reservation.stall?.name ?? reservation.stallName ?? "N/A"}</div>
+                                <div className="text-sm text-gray-400">ID: {reservation.stall?.id ?? reservation.stallId ?? "-"}</div>
+                                <div className="text-sm text-gray-400">{reservation.stall?.location ?? reservation.stallLocation ?? ""}</div>
                               </div>
                             </div>
-                          </div>
-                        </td>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                            {(() => {
+                              const count = reservation.stalls?.length ?? (reservation.stall ? 1 : 0);
+                              return (
+                                <div className="flex items-center gap-2">
+                                  <div className="text-sm font-medium text-white">{count}</div>
+                                  {count > 0 && (
+                                    <button
+                                      onClick={() => {
+                                        setSelectedReservation(reservation);
+                                        fetchStallsForReservation(reservation.id);
+                                        setShowStallsModal(true);
+                                      }}
+                                      className="text-blue-400 hover:text-blue-300 p-1 rounded"
+                                      title="View Stalls"
+                                    >
+                                      <Eye className="w-4 h-4" />
+                                    </button>
+                                  )}
+                                </div>
+                              );
+                            })()}
+                          </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                           <div className="flex items-center">
                             <Clock className="w-4 h-4 text-gray-400 mr-1" />
@@ -480,6 +518,69 @@ const AdminReservations = () => {
                     className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
                   >
                     Cancel Reservation
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Stalls Modal */}
+        <AnimatePresence>
+          {showStallsModal && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-gray-800/60 backdrop-blur-md rounded-lg p-6 max-w-2xl w-full mx-4 border border-gray-700/50 max-h-[80vh] overflow-y-auto"
+              >
+                <h3 className="text-lg font-medium text-white mb-4">Stalls for Reservation #{selectedReservation?.id}</h3>
+
+                {stallsLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <RefreshCw className="w-6 h-6 animate-spin text-blue-600" />
+                    <span className="ml-2 text-gray-300">Loading stalls...</span>
+                  </div>
+                ) : stallsError ? (
+                  <div className="text-red-500">{stallsError}</div>
+                ) : stallsForReservation.length === 0 ? (
+                  <div className="text-gray-300">No stalls found for this reservation.</div>
+                ) : (
+                  <div className="space-y-4">
+                    {stallsForReservation.map((stall, _sIdx) => (
+                      <div key={stall.id ?? stall.stallId ?? `stall-${_sIdx}`} className="bg-gray-800/40 border border-gray-700/50 rounded-lg p-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="text-white font-medium">{stall.name ?? stall.stallName}</div>
+                            <div className="text-sm text-gray-400">ID: {stall.id ?? stall.stallId ?? '-'}</div>
+                            <div className="text-sm text-gray-400">{stall.location ?? stall.stallLocation ?? ''}</div>
+                          </div>
+                          <div className="text-right">
+                            {stall.price != null && <div className="text-sm text-gray-300">${Number(stall.price).toFixed(2)}</div>}
+                            {stall.status && <div className="text-sm text-gray-400">{stall.status}</div>}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="flex justify-end mt-6">
+                  <button
+                    onClick={() => {
+                      setShowStallsModal(false);
+                      setStallsForReservation([]);
+                      setStallsError(null);
+                    }}
+                    className="px-4 py-2 text-gray-300 bg-gray-700 rounded-lg hover:bg-gray-600"
+                  >
+                    Close
                   </button>
                 </div>
               </motion.div>

@@ -213,6 +213,21 @@ export default class Admin {
     }
   }
 
+  // POST /api/admin/stalls - create a new stall
+  static async createStall(payload) {
+    try {
+      const response = await axios.post(
+        `${this.BASE_URL}/api/admin/stalls`,
+        payload,
+        this.getHeader()
+      );
+      return this.unwrap(response);
+    } catch (error) {
+      this.logError(error, "createStall");
+      throw error;
+    }
+  }
+
   /* ================= RESERVATIONS ================= */
   // ✅ Exists: GET /api/admin/reservations?page=0&size=10
   static async getAllReservations(params = {}) {

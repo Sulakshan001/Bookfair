@@ -1,5 +1,8 @@
 package com.example.Book_Fair_Project.mapper;
 
+
+
+
 import com.example.Book_Fair_Project.dto.email.EmailNotificationResponse;
 import com.example.Book_Fair_Project.dto.otp.UserOtpResponse;
 import com.example.Book_Fair_Project.dto.payment.PaymentResponse;
@@ -34,7 +37,10 @@ public class DtoMapper {
                 s.getStallId(),
                 s.getStallCode(),
                 s.getSize() != null ? s.getSize().name() : null,
-                s.getStatus() != null ? s.getStatus().name() : null
+                s.getStatus() != null ? s.getStatus().name() : null,
+                s.getHall(),
+                s.getPrice(),
+                s.getAreaSqm()
         );
     }
 
@@ -113,4 +119,3 @@ public class DtoMapper {
         );
     }
 }
-

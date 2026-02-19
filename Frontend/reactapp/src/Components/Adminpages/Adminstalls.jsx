@@ -5,7 +5,6 @@ import {
   Edit3,
   Trash2,
   Store,
-  MapPin,
   CheckCircle,
   XCircle,
   AlertTriangle,
@@ -17,7 +16,7 @@ import {
 import Admin from "../../services/Admin";
 import { motion, AnimatePresence } from "framer-motion";
 
-const stallStatuses = ["AVAILABLE","RESERVED", "OCCUPIED", "MAINTENANCE", "DISABLED"];
+const stallStatuses = ["AVAILABLE", "OCCUPIED", "MAINTENANCE", "DISABLED"];
 
 const Adminstalls = () => {
   const [stalls, setStalls] = useState([]);
@@ -33,6 +32,15 @@ const Adminstalls = () => {
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [selectedStall, setSelectedStall] = useState(null);
   const [newStatus, setNewStatus] = useState("");
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newStall, setNewStall] = useState({ 
+    stallCode: "", 
+    hall: "", 
+    size: "SMALL",
+    areaSqm: "",
+    price: "", 
+    status: "AVAILABLE" 
+  });
 
   // Notification
   const [notification, setNotification] = useState(null);
@@ -70,12 +78,12 @@ const Adminstalls = () => {
       data = data.filter((stall) => stall.status === selectedStatus);
     }
 
-    // Search by name or location
+    // Search by name or id
     const q = searchTerm.trim().toLowerCase();
     if (q) {
       data = data.filter((stall) =>
         (stall.name || "").toLowerCase().includes(q) ||
-        (stall.location || "").toLowerCase().includes(q)
+        (stall.id || "").toString().toLowerCase().includes(q)
       );
     }
 
@@ -110,6 +118,32 @@ const Adminstalls = () => {
     } catch (err) {
       console.error("Error updating stall status:", err);
       showNotification("Failed to update stall status", "error");
+    }
+  };
+
+  const handleCreateStall = async () => {
+    if (!newStall.stallCode) {
+      showNotification("Stall code is required", "error");
+      return;
+    }
+
+    try {
+      const payload = {
+        stallCode: newStall.stallCode,
+        hall: newStall.hall,
+        size: newStall.size,
+        areaSqm: newStall.areaSqm ? Number(newStall.areaSqm) : null,
+        price: newStall.price ? Number(newStall.price) : null,
+        status: newStall.status,
+      };
+      await Admin.createStall(payload);
+      showNotification("Stall created", "success");
+      setShowAddModal(false);
+      setNewStall({ stallCode: "", hall: "", size: "SMALL", areaSqm: "", price: "", status: "AVAILABLE" });
+      fetchStalls();
+    } catch (err) {
+      console.error("Error creating stall:", err);
+      showNotification("Failed to create stall", "error");
     }
   };
 
@@ -161,7 +195,7 @@ const Adminstalls = () => {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
                 <input
                   type="text"
-                  placeholder="Search stalls by name or location..."
+                  placeholder="Search stalls by name or ID..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 bg-transparent border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -186,15 +220,25 @@ const Adminstalls = () => {
               </div>
             </div>
 
-            {/* Refresh Button */}
-            <button
-              onClick={fetchStalls}
-              disabled={loading}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-              Refresh
-            </button>
+            {/* Actions */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              >
+                <Plus className="w-4 h-4" />
+                Add Stall
+              </button>
+
+              <button
+                onClick={fetchStalls}
+                disabled={loading}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                Refresh
+              </button>
+            </div>
           </div>
         </div>
 
@@ -236,13 +280,19 @@ const Adminstalls = () => {
                 <thead className="bg-slate-800/50 border-b border-slate-700/50">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
-                      Stall Details
+                      Stall Code
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      Hall
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      Size
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      Price
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
                       Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
-                      Location
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
                       Actions
@@ -252,13 +302,13 @@ const Adminstalls = () => {
                 <tbody className="divide-y divide-slate-700/50">
                   {filteredStalls.length === 0 ? (
                     <tr>
-                      <td colSpan="4" className="px-6 py-12 text-center text-slate-400">
+                      <td colSpan="6" className="px-6 py-12 text-center text-slate-400">
                         No stalls found matching your criteria.
                       </td>
                     </tr>
                   ) : (
-                    filteredStalls.map((stall) => (
-                      <tr key={stall.id} className="hover:bg-slate-800/30">
+                    filteredStalls.map((stall, _idx) => (
+                      <tr key={stall.id ?? `stall-${_idx}`} className="hover:bg-slate-800/30">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="flex-shrink-0">
@@ -266,7 +316,7 @@ const Adminstalls = () => {
                             </div>
                             <div className="ml-4">
                               <div className="text-sm font-medium text-white">
-                                {stall.name || `Stall ${stall.id}`}
+                                {stall.stallCode || stall.stall_code || `Stall ${stall.id}`}
                               </div>
                               <div className="text-sm text-slate-400">
                                 ID: {stall.id}
@@ -274,17 +324,20 @@ const Adminstalls = () => {
                             </div>
                           </div>
                         </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
+                          {stall.hall || "N/A"}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
+                          {stall.size || "N/A"}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
+                          ${Number(stall.price).toFixed(2)}
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(stall.status)}`}>
                             {getStatusIcon(stall.status)}
                             <span className="ml-1">{stall.status}</span>
                           </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
-                          <div className="flex items-center">
-                            <MapPin className="w-4 h-4 text-slate-400 mr-1" />
-                            {stall.location || "N/A"}
-                          </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex items-center space-x-2">
@@ -319,6 +372,107 @@ const Adminstalls = () => {
             </div>
           )}
         </div>
+
+        {/* Add Stall Modal */}
+        <AnimatePresence>
+          {showAddModal && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            >
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+                className="bg-slate-900 rounded-lg p-6 max-w-md w-full mx-4 border border-slate-800"
+              >
+                <h3 className="text-lg font-medium text-white mb-4">Add New Stall</h3>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300">Stall Code *</label>
+                    <input
+                      value={newStall.stallCode}
+                      onChange={(e) => setNewStall({ ...newStall, stallCode: e.target.value })}
+                      className="w-full px-3 py-2 bg-transparent border border-slate-700 rounded-lg text-white"
+                      placeholder="e.g., A1, B2, C34"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300">Hall</label>
+                      <input
+                        value={newStall.hall}
+                        onChange={(e) => setNewStall({ ...newStall, hall: e.target.value })}
+                        className="w-full px-3 py-2 bg-transparent border border-slate-700 rounded-lg text-white"
+                        placeholder="e.g., A, B"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300">Size</label>
+                      <select
+                        value={newStall.size}
+                        onChange={(e) => setNewStall({ ...newStall, size: e.target.value })}
+                        className="w-full px-3 py-2 bg-transparent border border-slate-700 rounded-lg text-white"
+                      >
+                        <option value="SMALL">SMALL</option>
+                        <option value="MEDIUM">MEDIUM</option>
+                        <option value="LARGE">LARGE</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300">Area (sqm)</label>
+                      <input
+                        value={newStall.areaSqm}
+                        onChange={(e) => setNewStall({ ...newStall, areaSqm: e.target.value })}
+                        className="w-full px-3 py-2 bg-transparent border border-slate-700 rounded-lg text-white"
+                        placeholder="Optional"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300">Price</label>
+                      <input
+                        value={newStall.price}
+                        onChange={(e) => setNewStall({ ...newStall, price: e.target.value })}
+                        className="w-full px-3 py-2 bg-transparent border border-slate-700 rounded-lg text-white"
+                        placeholder="Optional"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300">Status</label>
+                    <select
+                      value={newStall.status}
+                      onChange={(e) => setNewStall({ ...newStall, status: e.target.value })}
+                      className="w-full px-3 py-2 bg-transparent border border-slate-700 rounded-lg text-white"
+                    >
+                      {stallStatuses.map((s) => (
+                        <option key={s} value={s}>{s}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="flex justify-end mt-6 space-x-3">
+                  <button
+                    onClick={() => setShowAddModal(false)}
+                    className="px-4 py-2 text-slate-300 bg-slate-700 rounded-lg hover:bg-gray-600"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleCreateStall}
+                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                  >
+                    Create
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Delete Modal */}
         <AnimatePresence>

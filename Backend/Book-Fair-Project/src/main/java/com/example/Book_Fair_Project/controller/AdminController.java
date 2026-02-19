@@ -79,6 +79,14 @@ public class AdminController {
     public ResponseEntity<ApiResponse<Object>> getAllStalls() {
         var stalls = adminService.getAllStalls();
         return ResponseEntity.ok(ApiResponse.ok("All stalls retrieved successfully", stalls, 200));
+
+
+    }
+
+    @PostMapping("/stalls")
+    public ResponseEntity<ApiResponse<StallResponse>> createStall(@RequestBody StallResponse stallRequest) {
+        StallResponse createdStall = adminService.createStall(stallRequest);
+        return ResponseEntity.ok(ApiResponse.ok("Stall created successfully", createdStall, 201));
     }
 
     @PutMapping("/stalls/{stallId}/status/{status}")

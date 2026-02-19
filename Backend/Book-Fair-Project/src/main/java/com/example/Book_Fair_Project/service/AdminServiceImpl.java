@@ -170,6 +170,30 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @Transactional
+    public StallResponse createStall(StallResponse stallResponse) {
+        // Check if stall with same code already exists
+        if (stallRepository.findByStallCode(stallResponse.getStallCode()).isPresent()) {
+            throw new IllegalArgumentException("Stall with code " + stallResponse.getStallCode() + " already exists");
+        }
+
+        // Create new Stall entity
+        Stall newStall = new Stall();
+        newStall.setStallCode(stallResponse.getStallCode());
+        newStall.setHall(stallResponse.getHall());
+        newStall.setSize(Stall.Size.valueOf(stallResponse.getSize().toUpperCase()));
+        newStall.setPrice(stallResponse.getPrice());
+        newStall.setAreaSqm(stallResponse.getAreaSqm());
+        newStall.setStatus(Stall.Status.valueOf(stallResponse.getStatus().toUpperCase()));
+
+        // Save to database
+        Stall savedStall = stallRepository.save(newStall);
+
+        // Map to response and return
+        return DtoMapper.toStallResponse(savedStall);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public long getTotalStallsCount() {
         return stallRepository.count();
