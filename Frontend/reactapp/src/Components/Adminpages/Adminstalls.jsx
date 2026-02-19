@@ -17,7 +17,7 @@ import {
 import Admin from "../../services/Admin";
 import { motion, AnimatePresence } from "framer-motion";
 
-const stallStatuses = ["AVAILABLE", "OCCUPIED", "MAINTENANCE", "DISABLED"];
+const stallStatuses = ["AVAILABLE","RESERVED", "OCCUPIED", "MAINTENANCE", "DISABLED"];
 
 const Adminstalls = () => {
   const [stalls, setStalls] = useState([]);

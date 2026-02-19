@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 import { QRCodeCanvas } from "qrcode.react";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8087";
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8088";
 
 // ✅ unwrap helper (supports both {data:{...}} and direct body)
 const unwrap = (res) => {
