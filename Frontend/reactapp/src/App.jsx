@@ -25,6 +25,8 @@ import AdminReservertion from './Components/Adminpages/AdminReservertion';
 import Adminstatistics from './Components/Adminpages/Adminstatistic';
 import AdminTransactions from './Components/Adminpages/AdminTransactions';
 import AdminUser from './Components/Adminpages/AdminUser';
+import AdminPayment from "./Components/Adminpages/AdminPayment";
+import AdminNotification from "./Components/Adminpages/AdminNotification";
 
 function PublicLayout() {
   return (
@@ -75,6 +77,8 @@ function App() {
           <Route path="qrpasses" element={<AdminQrpass />} />
           <Route path="transactions" element={<AdminTransactions />} />
           <Route path="users" element={<AdminUser />} />
+          <Route path="notifications" element={<AdminNotification />} />
+          <Route path="payments" element={<AdminPayment />} />
 
 
         </Route>
