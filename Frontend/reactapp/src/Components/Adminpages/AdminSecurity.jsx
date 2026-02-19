@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Admin from "../../services/Admin";
 
 const AdminSecurity = () => {
   const [securitySettings, setSecuritySettings] = useState({
@@ -12,6 +13,13 @@ const AdminSecurity = () => {
   });
 
   const [securityLogs, setSecurityLogs] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [usersLoading, setUsersLoading] = useState(false);
+  const [usersPage, setUsersPage] = useState(0);
+  const [usersSize, setUsersSize] = useState(10);
+  const [usersTotalPages, setUsersTotalPages] = useState(0);
+  const [roleFilter, setRoleFilter] = useState("ALL");
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
@@ -21,7 +29,12 @@ const AdminSecurity = () => {
   useEffect(() => {
     fetchSecuritySettings();
     fetchSecurityLogs();
+    fetchUsers();
   }, []);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [usersPage, usersSize, roleFilter]);
 
   const fetchSecuritySettings = async () => {
     try {
@@ -94,6 +107,46 @@ const AdminSecurity = () => {
         return "bg-green-500/20 border-green-500 text-green-400";
       default:
         return "bg-slate-500/20 border-slate-500 text-slate-400";
+    }
+  };
+
+  // Users management helpers
+  const fetchUsers = async () => {
+    setUsersLoading(true);
+    try {
+      const params = { page: usersPage, size: usersSize };
+      const page = await Admin.getAllUsers(params);
+      setUsers(page?.content || []);
+      setUsersTotalPages(page?.totalPages ?? 0);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      showMessage("Failed to load users", "error");
+    } finally {
+      setUsersLoading(false);
+    }
+  };
+
+  const handleChangeUserRole = async (userId, newRole) => {
+    if (!window.confirm(`Change role of user ${userId} to ${newRole}?`)) return;
+    try {
+      await Admin.updateUserRole(userId, newRole);
+      showMessage("User role updated", "success");
+      fetchUsers();
+    } catch (error) {
+      console.error("Error updating role:", error);
+      showMessage("Failed to update user role", "error");
+    }
+  };
+
+  const handleDeleteUser = async (userId) => {
+    if (!window.confirm("Delete this user permanently?")) return;
+    try {
+      await Admin.deleteUser(userId);
+      showMessage("User deleted", "success");
+      fetchUsers();
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      showMessage("Failed to delete user", "error");
     }
   };
 
@@ -291,9 +344,7 @@ const AdminSecurity = () => {
               <div className="inline-block animate-spin">⏳</div> Loading logs...
             </div>
           ) : securityLogs.length === 0 ? (
-            <div className="text-slate-400 text-center py-12">
-              No security logs found
-            </div>
+            <div className="text-slate-400 text-center py-12">No security logs found</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">

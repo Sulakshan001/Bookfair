@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import Admin from "../../services/Admin";
 
 const AdminNotification = () => {
   const [emailNotifications, setEmailNotifications] = useState([]);
@@ -12,9 +12,7 @@ const AdminNotification = () => {
   const [messageType, setMessageType] = useState("");
   const [selectedNotification, setSelectedNotification] = useState(null);
 
-  const API_BASE_URL = "http://localhost:8088/api/admin/email-notifications";
-
-  // Fetch all email notifications with pagination
+  // Fetch all email notifications with pagination using Admin service
   useEffect(() => {
     fetchEmailNotifications();
     fetchFailedNotifications();
@@ -23,16 +21,12 @@ const AdminNotification = () => {
   const fetchEmailNotifications = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}?page=${currentPage}&size=${pageSize}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      setEmailNotifications(response.data.content || []);
-      setTotalPages(response.data.totalPages || 0);
+      const page = await Admin.getAllEmailNotifications({
+        page: currentPage,
+        size: pageSize,
+      });
+      setEmailNotifications(page?.content || []);
+      setTotalPages(page?.totalPages ?? 0);
       setMessageType("");
     } catch (error) {
       console.error("Error fetching notifications:", error);
@@ -44,12 +38,8 @@ const AdminNotification = () => {
 
   const fetchFailedNotifications = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/failed`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      setFailedNotifications(response.data || []);
+      const list = await Admin.getFailedEmailNotifications();
+      setFailedNotifications(list || []);
     } catch (error) {
       console.error("Error fetching failed notifications:", error);
     }
@@ -57,15 +47,7 @@ const AdminNotification = () => {
 
   const resendEmailNotification = async (notificationId) => {
     try {
-      await axios.post(
-        `${API_BASE_URL}/${notificationId}/resend`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      await Admin.resendEmailNotification(notificationId);
       showMessage("Email notification resent successfully!", "success");
       fetchEmailNotifications();
       fetchFailedNotifications();

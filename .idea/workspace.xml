@@ -4,18 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="537b8248-eb68-44c4-bbe1-9b1283d07158" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Frontend/reactapp/src/Components/Adminpages/AdminUser.jsx" afterDir="false" />
+    <list default="true" id="c28ba808-eb9b-48d4-b77e-7d9570ca0bb8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/model/Stall.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/model/Stall.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/service/ReservationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/service/ReservationServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/Stall$Status.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/Stall$Status.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/Stall.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/model/Stall.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/src/Components/Adminpages/Adminstalls.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/src/Components/Adminpages/Adminstalls.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/src/Components/pages/StallMap.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/src/Components/pages/StallMap.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/src/Components/Adminpages/AdminNotification.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/src/Components/Adminpages/AdminNotification.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/src/Components/Adminpages/AdminSecurity.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/src/Components/Adminpages/AdminSecurity.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/src/index.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
