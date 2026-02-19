@@ -4,19 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9102afa0-c2b5-4c73-b6fb-cd642d987c1a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/controller/AdminController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/service/AdminServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/utils/QrUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/repository/QrPassRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/repository/QrPassRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/service/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/service/AuthServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/service/MailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/service/MailService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/service/MailServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/service/MailServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/service/ReservationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/service/ReservationServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/service/MailService.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/service/MailService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/service/MailServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/target/classes/com/example/Book_Fair_Project/service/MailServiceImpl.class" afterDir="false" />
+    <list default="true" id="a80c5a29-f313-4a44-9365-5cf2004240fe" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Frontend/reactapp/src/Components/Adminpages/AdminDashboard.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/reactapp/src/services/Admin.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/reactapp/src/services/StallReservationApi.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/src/services/Authentication.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/src/services/Authentication.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/src/services/UserAccountApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/src/services/UserAccountApi.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,12 +24,10 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
   "associatedIndex": 6
 }]]></component>
-  <component name="ProjectId" id="39qv2uOUa1wsfPVSxo7yo3P3MdO" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="1" id="Add" />
-  </component>
+  <component name="ProjectId" id="39s92HJOsVa4R23eeNDRnpthCKy" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -43,17 +38,19 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "Dayastan",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/kisha/Desktop/Bookfair/Bookfair"
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="9102afa0-c2b5-4c73-b6fb-cd642d987c1a" name="Changes" comment="" />
-      <created>1771436211578</created>
+      <changelist id="a80c5a29-f313-4a44-9365-5cf2004240fe" name="Changes" comment="" />
+      <created>1771473706957</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1771436211578</updated>
+      <updated>1771473706957</updated>
     </task>
     <servers />
   </component>
