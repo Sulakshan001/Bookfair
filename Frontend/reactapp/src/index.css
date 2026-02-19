@@ -8,7 +8,7 @@ select option {
 
 
 select {
-  color: black;
+  color: white;
 }
 
 select option:checked {
