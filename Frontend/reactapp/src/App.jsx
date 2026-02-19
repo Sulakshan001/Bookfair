@@ -27,7 +27,8 @@ import AdminTransactions from './Components/Adminpages/AdminTransactions';
 import AdminUser from './Components/Adminpages/AdminUser';
 import AdminPayment from "./Components/Adminpages/AdminPayment";
 import AdminNotification from "./Components/Adminpages/AdminNotification";
-
+import AdminSecurity from "./Components/Adminpages/AdminSecurity";
+import AdminSettings from './Components/Adminpages/AdminSetting';
 function PublicLayout() {
   return (
     <div className="min-h-screen bg-gray-50">
@@ -79,6 +80,8 @@ function App() {
           <Route path="users" element={<AdminUser />} />
           <Route path="notifications" element={<AdminNotification />} />
           <Route path="payments" element={<AdminPayment />} />
+          <Route path="security" element={<AdminSecurity />} />
+          <Route path="settings" element={<AdminSettings />} />
 
 
         </Route>
