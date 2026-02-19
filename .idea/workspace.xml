@@ -5,15 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a80c5a29-f313-4a44-9365-5cf2004240fe" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Frontend/reactapp/src/Components/Adminpages/AdminDashboard.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Frontend/reactapp/src/services/Admin.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Frontend/reactapp/src/services/StallReservationApi.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/src/services/Authentication.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/src/services/Authentication.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/src/services/UserAccountApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/src/services/UserAccountApi.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,11 +16,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 6
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="39s92HJOsVa4R23eeNDRnpthCKy" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -36,7 +32,7 @@
   "keyToString": {
     "Application.BookFairProjectApplication.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Dayastan",
+    "git-widget-placeholder": "Amillthan",
     "kotlin-language-version-configured": "true",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
