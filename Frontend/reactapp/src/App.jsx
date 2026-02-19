@@ -14,8 +14,16 @@ import UserAccountApi from './services/UserAccountApi';
 import Authentication from './services/Authentication';
 import { FaSignInAlt } from 'react-icons/fa';
 import Signup from "./Components/pages/Signup";
+import StallMap from './Components/pages/StallMap';
 import AdminDashboard from "./Components/Adminpages/AdminDashboard";
-
+import AdminStallPricing from './Components/Adminpages/AdminStallPricing';  
+import Adminstalls from './Components/Adminpages/Adminstalls';
+import AdminEvents from './Components/Adminpages/AdminEvents';
+import AdminMaps from './Components/Adminpages/AdminMaps';
+import AdminQrpass from './Components/Adminpages/AdminQrpass';
+import AdminReservation from './Components/Adminpages/AdminReservertion';
+import Adminstatistics from './Components/Adminpages/Adminstatistics';
+import AdminTransactions from './Components/Adminpages/AdminTransactions';
 
 function PublicLayout() {
   return (
@@ -49,14 +57,23 @@ function App() {
           <Route path="/sign-in" element={<Signin />} />
           <Route path="/sign-up" element={<Signup />} />
 
-
+          <Route path="/booking" element={<StallMap />} />
 
 
         </Route>
 
-        {/* ✅ Admin pages: NO Navbar/Footer */}
 
         <Route path="/admin/*" element={<AdminLayout />}>
+
+          <Route path="stalls" element={<Adminstalls />} />
+          <Route path="stallPricing" element={<AdminStallPricing />} />
+          <Route path="reservations" element={<AdminReservertion />} />
+          <Route path="events" element={<AdminEvents />} />
+          <Route path="maps" element={<AdminMaps />} />
+          <Route path="qrpasses" element={<AdminQrpass />} />
+          <Route path="transactions" element={<AdminTransactions />} />
+
+
         </Route>
 
       </Routes>
