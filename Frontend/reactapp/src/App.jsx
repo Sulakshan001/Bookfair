@@ -14,6 +14,7 @@ import UserAccountApi from './services/UserAccountApi';
 import Authentication from './services/Authentication';
 import { FaSignInAlt } from 'react-icons/fa';
 import Signup from "./Components/pages/Signup";
+import AdminDashboard from "./Components/Adminpages/AdminDashboard";
 
 
 function PublicLayout() {
@@ -27,6 +28,11 @@ function PublicLayout() {
 }
 
 
+function AdminLayout() {
+  return <AdminDashboard />;
+}
+
+
 
 function App() {
 
@@ -35,15 +41,24 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<PublicLayout />}>
-         <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/about" element={<About />} />
           <Route path="/service" element={<Service />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/sign-in" element={<Signin />} />
           <Route path="/sign-up" element={<Signup />} />
-          
+
+
+
+
         </Route>
+
+        {/* ✅ Admin pages: NO Navbar/Footer */}
+
+        <Route path="/admin/*" element={<AdminLayout />}>
+        </Route>
+
       </Routes>
     </BrowserRouter>
   )
