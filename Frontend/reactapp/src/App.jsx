@@ -21,9 +21,10 @@ import Adminstalls from './Components/Adminpages/Adminstalls';
 import AdminEvents from './Components/Adminpages/AdminEvents';
 import AdminMaps from './Components/Adminpages/AdminMaps';
 import AdminQrpass from './Components/Adminpages/AdminQrpass';
-import AdminReservation from './Components/Adminpages/AdminReservertion';
-import Adminstatistics from './Components/Adminpages/Adminstatistics';
+import AdminReservertion from './Components/Adminpages/AdminReservertion';
+import Adminstatistics from './Components/Adminpages/Adminstatistic';
 import AdminTransactions from './Components/Adminpages/AdminTransactions';
+import AdminUser from './Components/Adminpages/AdminUser';
 
 function PublicLayout() {
   return (
@@ -64,7 +65,8 @@ function App() {
 
 
         <Route path="/admin/*" element={<AdminLayout />}>
-
+          
+          <Route index element={<Adminstatistics />} />
           <Route path="stalls" element={<Adminstalls />} />
           <Route path="stallPricing" element={<AdminStallPricing />} />
           <Route path="reservations" element={<AdminReservertion />} />
@@ -72,6 +74,7 @@ function App() {
           <Route path="maps" element={<AdminMaps />} />
           <Route path="qrpasses" element={<AdminQrpass />} />
           <Route path="transactions" element={<AdminTransactions />} />
+          <Route path="users" element={<AdminUser />} />
 
 
         </Route>
