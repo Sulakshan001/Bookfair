@@ -9,7 +9,14 @@ import java.util.List;
 public class Stall {
 
     public enum Size { SMALL, MEDIUM, LARGE }
-    public enum Status { AVAILABLE, RESERVED }
+    public enum Status {
+        AVAILABLE,
+        RESERVED,
+        OCCUPIED,
+        MAINTENANCE,
+        DISABLED
+    }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

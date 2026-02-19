@@ -272,7 +272,7 @@ public class AuthServiceImpl implements AuthService {
           <div style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:12px;
                       box-shadow:0 6px 18px rgba(0,0,0,0.08);padding:28px;text-align:center;">
             
-            <h2 style="margin:0 0 10px;color:#0B4C5F;">BookFairPro Email Verification</h2>
+            <h2 style="margin:0 0 10px;color:#0B4C5F;">BookFair Email Verification</h2>
             <p style="margin:0 0 18px;color:#555;font-size:15px;">Hello,</p>
             <p style="margin:0 0 18px;color:#555;font-size:15px;">Your verification OTP is:</p>
 
