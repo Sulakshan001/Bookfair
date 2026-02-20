@@ -44,8 +44,7 @@ public class CheckoutServiceImpl implements CheckoutService {
             ReservationService reservationService,
             PaymentService paymentService,
             QrPassService qrPassService,
-            MailService mailService
-    ) {
+            MailService mailService) {
         this.userRepository = userRepository;
         this.stallRepository = stallRepository;
         this.reservationRepository = reservationRepository;
@@ -60,8 +59,10 @@ public class CheckoutServiceImpl implements CheckoutService {
     public ReservationCheckoutResponse reservePayAndGenerateQr(ReservationCheckoutRequest request) {
 
         // ✅ strict validation (prevents random 400)
-        if (request == null) throw new BadRequestException("Request body is missing");
-        if (request.getUserId() == null) throw new BadRequestException("User ID is required");
+        if (request == null)
+            throw new BadRequestException("Request body is missing");
+        if (request.getUserId() == null)
+            throw new BadRequestException("User ID is required");
         if (request.getStallIds() == null || request.getStallIds().isEmpty())
             throw new BadRequestException("At least one stallId is required");
         if (request.getGenres() == null || request.getGenres().isEmpty())
@@ -71,6 +72,24 @@ public class CheckoutServiceImpl implements CheckoutService {
 
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new NotFoundException("User not found: " + request.getUserId()));
+
+        // ✅ Enforce MAX 3 stalls per user limit
+        final int MAX_STALLS_PER_USER = 3;
+        long existingStallCount = reservationRepository.countTotalStallsByUserId(request.getUserId());
+        int newStallCount = request.getStallIds().size();
+        if (existingStallCount + newStallCount > MAX_STALLS_PER_USER) {
+            long remaining = MAX_STALLS_PER_USER - existingStallCount;
+            if (remaining <= 0) {
+                throw new BadRequestException(
+                        "You have already booked the maximum of " + MAX_STALLS_PER_USER + " stalls. "
+                                + "You cannot book any more stalls.");
+            } else {
+                throw new BadRequestException(
+                        "You can only book " + remaining + " more stall(s). "
+                                + "You currently have " + existingStallCount + " stall(s) booked "
+                                + "and the maximum is " + MAX_STALLS_PER_USER + ".");
+            }
+        }
 
         // 1) Save Genres
         userGenreService.replaceGenres(request.getUserId(), request.getGenres());
@@ -84,7 +103,8 @@ public class CheckoutServiceImpl implements CheckoutService {
 
         // Need Reservation entity for QR email logging
         Reservation reservation = reservationRepository.findById(reservationRes.getReservationId())
-                .orElseThrow(() -> new NotFoundException("Reservation not found: " + reservationRes.getReservationId()));
+                .orElseThrow(
+                        () -> new NotFoundException("Reservation not found: " + reservationRes.getReservationId()));
 
         // 3) Calculate amount (based on stall codes A/B/C)
         BigDecimal amount = calcAmountFromStalls(request.getStallIds());
@@ -97,8 +117,7 @@ public class CheckoutServiceImpl implements CheckoutService {
         payReq.setPaymentDetails(
                 (request.getPaymentDetails() == null || request.getPaymentDetails().isBlank())
                         ? "Auto checkout from UI"
-                        : request.getPaymentDetails()
-        );
+                        : request.getPaymentDetails());
 
         PaymentResponse paymentRes = paymentService.processPayment(payReq);
 
@@ -122,8 +141,10 @@ public class CheckoutServiceImpl implements CheckoutService {
     @Override
     public ReservationResponse reserve(ReservationCheckoutRequest request) {
         // Validation
-        if (request == null) throw new BadRequestException("Request body is missing");
-        if (request.getUserId() == null) throw new BadRequestException("User ID is required");
+        if (request == null)
+            throw new BadRequestException("Request body is missing");
+        if (request.getUserId() == null)
+            throw new BadRequestException("User ID is required");
         if (request.getStallIds() == null || request.getStallIds().isEmpty())
             throw new BadRequestException("At least one stallId is required");
         if (request.getGenres() == null || request.getGenres().isEmpty())
@@ -131,6 +152,24 @@ public class CheckoutServiceImpl implements CheckoutService {
 
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new NotFoundException("User not found: " + request.getUserId()));
+
+        // ✅ Enforce MAX 3 stalls per user limit
+        final int MAX_STALLS_PER_USER = 3;
+        long existingStallCount = reservationRepository.countTotalStallsByUserId(request.getUserId());
+        int newStallCount = request.getStallIds().size();
+        if (existingStallCount + newStallCount > MAX_STALLS_PER_USER) {
+            long remaining = MAX_STALLS_PER_USER - existingStallCount;
+            if (remaining <= 0) {
+                throw new BadRequestException(
+                        "You have already booked the maximum of " + MAX_STALLS_PER_USER + " stalls. "
+                                + "You cannot book any more stalls.");
+            } else {
+                throw new BadRequestException(
+                        "You can only book " + remaining + " more stall(s). "
+                                + "You currently have " + existingStallCount + " stall(s) booked "
+                                + "and the maximum is " + MAX_STALLS_PER_USER + ".");
+            }
+        }
 
         // 1) Save Genres
         userGenreService.replaceGenres(request.getUserId(), request.getGenres());
@@ -155,17 +194,22 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     private BigDecimal calcAmountFromStalls(List<Long> stallIds) {
         List<Stall> stalls = stallRepository.findAllById(stallIds);
-        if (stalls.size() != stallIds.size()) throw new BadRequestException("Some stalls not found");
+        if (stalls.size() != stallIds.size())
+            throw new BadRequestException("Some stalls not found");
 
         BigDecimal total = BigDecimal.ZERO;
         for (Stall s : stalls) {
             String code = s.getStallCode();
-            if (code == null) throw new BadRequestException("Stall code missing for stallId: " + s.getStallId());
+            if (code == null)
+                throw new BadRequestException("Stall code missing for stallId: " + s.getStallId());
 
             BigDecimal price;
-            if (code.startsWith("A")) price = BigDecimal.valueOf(2500);
-            else if (code.startsWith("B")) price = BigDecimal.valueOf(5000);
-            else price = BigDecimal.valueOf(7500);
+            if (code.startsWith("A"))
+                price = BigDecimal.valueOf(2500);
+            else if (code.startsWith("B"))
+                price = BigDecimal.valueOf(5000);
+            else
+                price = BigDecimal.valueOf(7500);
 
             total = total.add(price);
         }
