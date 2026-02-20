@@ -11,4 +11,6 @@ public interface ReservationService {
     List<ReservationResponse> getUserReservations(Long userId);
     List<ReservationResponse> getAllReservations();
     ReservationResponse cancelReservation(Long reservationId);
+    ReservationResponse cancelStallFromReservation(Long reservationId, Long stallId);
+
 }

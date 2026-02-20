@@ -7,7 +7,6 @@ import com.example.Book_Fair_Project.exception.NotFoundException;
 import com.example.Book_Fair_Project.mapper.DtoMapper;
 import com.example.Book_Fair_Project.model.*;
 import com.example.Book_Fair_Project.repository.*;
-import com.example.Book_Fair_Project.model.Stall;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -165,6 +164,18 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new NotFoundException("Reservation not found: " + reservationId));
 
+        // ✅ Build response BEFORE deleting (so we still have the data)
+        ReservationResponse response = DtoMapper.toReservationResponse(reservation);
+
+        // ✅ Send cancellation email BEFORE deleting (so FK to reservation still exists
+        // for logging)
+        try {
+            sendReservationCancellationEmail(reservation.getUser(), reservation);
+        } catch (Exception e) {
+            // Don't let email failure block the cancellation
+            System.err.println("⚠️ Failed to send cancellation email: " + e.getMessage());
+        }
+
         // Free up stalls
         for (ReservationStall rs : reservation.getReservationStalls()) {
             Stall stall = rs.getStall();
@@ -174,9 +185,99 @@ public class ReservationServiceImpl implements ReservationService {
 
         reservationRepository.delete(reservation);
 
-        sendReservationCancellationEmail(reservation.getUser(), reservation);
+        return response;
+    }
 
-        return DtoMapper.toReservationResponse(reservation);
+    @Override
+    public ReservationResponse cancelStallFromReservation(Long reservationId, Long stallId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new NotFoundException("Reservation not found: " + reservationId));
+
+        // Find the specific ReservationStall link
+        ReservationStall targetRs = null;
+        for (ReservationStall rs : reservation.getReservationStalls()) {
+            if (rs.getStall().getStallId().equals(stallId)) {
+                targetRs = rs;
+                break;
+            }
+        }
+
+        if (targetRs == null) {
+            throw new BadRequestException("Stall " + stallId + " is not part of Reservation #" + reservationId);
+        }
+
+        // Free up the stall
+        Stall stall = targetRs.getStall();
+        stall.setStatus(Stall.Status.AVAILABLE);
+        stallRepository.save(stall);
+
+        // Remove the link
+        reservation.getReservationStalls().remove(targetRs);
+        reservationStallRepository.delete(targetRs);
+
+        // If no stalls remain, delete the entire reservation
+        if (reservation.getReservationStalls().isEmpty()) {
+            // Send email before deleting
+            try {
+                sendReservationCancellationEmail(reservation.getUser(), reservation);
+            } catch (Exception e) {
+                System.err.println("⚠️ Failed to send cancellation email: " + e.getMessage());
+            }
+
+            ReservationResponse response = DtoMapper.toReservationResponse(reservation);
+            reservationRepository.delete(reservation);
+            return response;
+        }
+
+        // Save the updated reservation and return
+        Reservation saved = reservationRepository.save(reservation);
+
+        // Send a stall removal notification email
+        try {
+            String subject = "Stall Removed from Reservation - Refund Initiated | BookFair";
+
+            String html = ""
+                    + "<div style='font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:auto;"
+                    + "border:1px solid #e5e5e5;border-radius:8px;padding:24px;background:#ffffff;'>"
+
+                    + "<h2 style='color:#d35400;margin-top:0;'>Stall Removed from Reservation</h2>"
+
+                    + "<p>Hello <b>" + reservation.getUser().getName() + "</b>,</p>"
+
+                    + "<p>The stall <b>" + stall.getStallCode() + "</b> has been removed from your "
+                    + "reservation <b>#" + reservationId + "</b>.</p>"
+
+                    + "<div style='background:#f8f9fa;padding:12px;border-radius:6px;margin:15px 0;'>"
+                    + "<b>Remaining Stalls:</b> " + saved.getReservationStalls().size()
+                    + "</div>"
+
+                    // ✅ REFUND MESSAGE BLOCK
+                    + "<div style='background:#eafaf1;border:1px solid #2ecc71;"
+                    + "padding:14px;border-radius:6px;margin:18px 0;color:#1e8449;'>"
+                    + "<b>&#128176; Refund Initiated</b><br>"
+                    + "The payment for the removed stall has been refunded to your original payment method.<br>"
+                    + "Refunds typically arrive within <b>3–5 working days</b>."
+                    + "</div>"
+
+                    + "<p>If this change was not expected, please contact support.</p>"
+
+                    + "<br>"
+                    + "<p style='color:#555;'>Regards,<br><b>BookFair Team</b></p>"
+
+                    + "</div>";
+
+            mailService.sendAndLogHtml(
+                    reservation.getUser(),
+                    saved,
+                    EmailNotification.EmailType.GENERAL,
+                    subject,
+                    html
+            );
+        } catch (Exception e) {
+            System.err.println("⚠️ Failed to send stall removal email: " + e.getMessage());
+        }
+
+        return DtoMapper.toReservationResponse(saved);
     }
 
     private void sendReservationConfirmationEmail(User user, Reservation reservation) {
