@@ -96,6 +96,10 @@ const StallMap = () => {
   const [paymentId, setPaymentId] = useState(null);
   const [checkoutRes, setCheckoutRes] = useState(null); // {qr: {...}}
 
+  // ✅ User's existing reservations
+  const [userReservations, setUserReservations] = useState([]);
+  const [cancellingId, setCancellingId] = useState(null);
+
   // -----------------------------
   // UI STATE
   // -----------------------------
@@ -174,8 +178,76 @@ const StallMap = () => {
     }
   };
 
+  // ✅ Fetch user's existing reservations
+  const fetchUserReservations = async () => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) return;
+    try {
+      const res = await api.get(`/api/reservations/user/${userId}`);
+      const data = unwrap(res);
+      setUserReservations(Array.isArray(data) ? data : []);
+    } catch (e) {
+      console.error("Failed to fetch user reservations:", e?.response?.data?.message || e.message);
+    }
+  };
+
+  // ✅ Cancel a reservation
+  const cancelReservation = async (resId) => {
+    if (cancellingId) return;
+    const confirmed = window.confirm(
+      `Are you sure you want to cancel Reservation #${resId}?\nThis will free up ALL stalls and cannot be undone.`
+    );
+    if (!confirmed) return;
+
+    setCancellingId(resId);
+    setApiError("");
+    try {
+      await api.delete(`/api/reservations/${resId}`);
+      await fetchStalls();
+      await fetchUserReservations();
+    } catch (e) {
+      setApiError(
+        e?.response?.data?.message ||
+        JSON.stringify(e?.response?.data) ||
+        e.message ||
+        "Cancel failed"
+      );
+    } finally {
+      setCancellingId(null);
+    }
+  };
+
+  // ✅ Cancel a SINGLE stall from a reservation
+  const [cancellingStallKey, setCancellingStallKey] = useState(null);
+
+  const cancelSingleStall = async (resId, stallId, stallCode) => {
+    if (cancellingStallKey) return;
+    const confirmed = window.confirm(
+      `Are you sure you want to cancel stall ${stallCode} from Reservation #${resId}?\nThis will free up this stall and cannot be undone.`
+    );
+    if (!confirmed) return;
+
+    setCancellingStallKey(`${resId}-${stallId}`);
+    setApiError("");
+    try {
+      await api.delete(`/api/reservations/${resId}/stalls/${stallId}`);
+      await fetchStalls();
+      await fetchUserReservations();
+    } catch (e) {
+      setApiError(
+        e?.response?.data?.message ||
+        JSON.stringify(e?.response?.data) ||
+        e.message ||
+        "Cancel stall failed"
+      );
+    } finally {
+      setCancellingStallKey(null);
+    }
+  };
+
   useEffect(() => {
     fetchStalls();
+    fetchUserReservations();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -608,14 +680,14 @@ const StallMap = () => {
 
       setPaymentId(pid ?? null);
       setShowPaymentModal(false);
-      
+
       // 🆕 Save user genres to database upon successful payment
       const userId = Number(localStorage.getItem("userId"));
       const allGenres = [...new Set(Object.values(stallGenres).flat())];
       if (userId && allGenres.length > 0) {
         await saveUserGenres(userId, allGenres);
       }
-      
+
       setActiveStep(3);
     } catch (e) {
       setApiError(
@@ -1198,7 +1270,7 @@ const StallMap = () => {
                     <option value="CARD">Card</option>
                     <option value="PAYPAL">PayPal</option>
                   </select>
-                  
+
                 </div>
                 <p className="text-sm text-gray-600 mb-4">Amount to pay: Rs {totalPrice}</p>
                 <div className="flex flex-wrap gap-3">
@@ -1221,20 +1293,20 @@ const StallMap = () => {
                 <div className="flex flex-col items-center p-6 bg-green-50 rounded-lg border border-green-200 space-y-4">
                   <p className="text-sm text-gray-600 text-center">Your booking QR code is ready. Download it to access your stalls.</p>
                   <div className="p-4 bg-white rounded border border-gray-200">
-                    <QRCodeCanvas 
-                      value={checkoutRes.qr.qrCode} 
-                      size={256} 
+                    <QRCodeCanvas
+                      value={checkoutRes.qr.qrCode}
+                      size={256}
                       level="H"
                       includeMargin={true}
-                      ref={qrCanvasRef} 
+                      ref={qrCanvasRef}
                     />
                   </div>
                   <div className="text-center space-y-2 w-full">
                     <p className="text-sm font-medium text-gray-700">QR ID: <span className="font-mono bg-gray-100 px-2 py-1 rounded">{checkoutRes.qr.qrId}</span></p>
                     <p className="text-xs text-gray-500">Show this QR code at the gate for entry</p>
                   </div>
-                  <button 
-                    onClick={downloadQr} 
+                  <button
+                    onClick={downloadQr}
                     className="mt-2 px-6 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 font-medium transition-colors"
                   >
                     📥 Download QR Code
@@ -1249,6 +1321,102 @@ const StallMap = () => {
             )}
             <div className="mt-6 flex flex-wrap gap-3">
               <button onClick={clearAll} disabled={loading} className="px-4 py-2 rounded bg-gray-700 text-white hover:bg-gray-800 disabled:opacity-60">Clear All</button>
+            </div>
+          </div>
+        )}
+
+        {/* ================= MY RESERVATIONS SECTION ================= */}
+        {userReservations.length > 0 && (
+          <div className="mt-8 p-6 bg-white rounded-xl shadow-lg border border-gray-200">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-semibold text-gray-800">
+                📋 My Reservations ({userReservations.length})
+              </h3>
+              <button
+                onClick={fetchUserReservations}
+                className="px-3 py-1.5 rounded bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm font-medium transition"
+                type="button"
+              >
+                Refresh
+              </button>
+            </div>
+            <div className="space-y-4">
+              {userReservations.map((reservation) => (
+                <div
+                  key={reservation.reservationId}
+                  className="p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors"
+                >
+                  <div className="flex flex-col gap-3">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className="text-sm font-semibold text-gray-800">
+                        Reservation #{reservation.reservationId}
+                      </span>
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-medium">
+                        {reservation.stalls?.length || 0} stall(s)
+                      </span>
+                      {reservation.reservationDate && (
+                        <span className="text-xs text-gray-500">
+                          {new Date(reservation.reservationDate).toLocaleDateString("en-LK", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Stalls with individual cancel buttons */}
+                    {reservation.stalls && reservation.stalls.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {reservation.stalls.map((stall) => {
+                          let bgColor = "bg-green-100 text-green-800 border-green-200";
+                          if (stall.stallCode?.startsWith("B")) bgColor = "bg-yellow-100 text-yellow-800 border-yellow-200";
+                          else if (stall.stallCode?.startsWith("C")) bgColor = "bg-purple-100 text-purple-800 border-purple-200";
+                          const stallKey = `${reservation.reservationId}-${stall.stallId}`;
+                          const isCancelling = cancellingStallKey === stallKey;
+                          return (
+                            <span
+                              key={stall.stallId}
+                              className={`inline-flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-md font-medium border ${bgColor}`}
+                            >
+                              {stall.stallCode} ({stall.size || "—"})
+                              <button
+                                onClick={() => cancelSingleStall(reservation.reservationId, stall.stallId, stall.stallCode)}
+                                disabled={isCancelling}
+                                className="ml-1 w-4 h-4 flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] font-bold hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                title={`Cancel stall ${stall.stallCode}`}
+                              >
+                                {isCancelling ? "…" : "✕"}
+                              </button>
+                            </span>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    {reservation.qrId && (
+                      <p className="text-xs text-gray-500">
+                        QR ID: <span className="font-mono">{reservation.qrId}</span>
+                      </p>
+                    )}
+
+                    {/* Cancel ALL button */}
+                    <div className="flex justify-end pt-2 border-t border-gray-200">
+                      <button
+                        onClick={() => cancelReservation(reservation.reservationId)}
+                        disabled={cancellingId === reservation.reservationId}
+                        className="px-4 py-1.5 rounded-md bg-red-600 text-white text-xs font-medium hover:bg-red-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+                      >
+                        {cancellingId === reservation.reservationId
+                          ? "Cancelling..."
+                          : "Cancel All Stalls"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}
