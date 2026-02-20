@@ -7,6 +7,7 @@ import com.example.Book_Fair_Project.exception.NotFoundException;
 import com.example.Book_Fair_Project.mapper.DtoMapper;
 import com.example.Book_Fair_Project.model.*;
 import com.example.Book_Fair_Project.repository.*;
+import com.example.Book_Fair_Project.model.Stall;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +31,7 @@ public class ReservationServiceImpl implements ReservationService {
             ReservationStallRepository reservationStallRepository,
             UserRepository userRepository,
             StallRepository stallRepository,
-            MailService mailService
-    ) {
+            MailService mailService) {
         this.reservationRepository = reservationRepository;
         this.reservationStallRepository = reservationStallRepository;
         this.userRepository = userRepository;
@@ -39,17 +39,55 @@ public class ReservationServiceImpl implements ReservationService {
         this.mailService = mailService;
     }
 
+    // ✅ NEW METHOD (Fix your compile error)
+
+    public ReservationResponse createReservation(Long userId, List<Long> stallIds) {
+        if (userId == null)
+            throw new BadRequestException("User ID is required");
+        if (stallIds == null || stallIds.isEmpty())
+            throw new BadRequestException("At least one stall ID is required");
+
+        ReservationCreateRequest req = new ReservationCreateRequest();
+        req.setUserId(userId);
+        req.setStallIds(stallIds);
+
+        return createReservation(req); // call your existing method
+    }
+
     @Override
     public ReservationResponse createReservation(ReservationCreateRequest request) {
-        if (request == null) throw new BadRequestException("Request body is missing");
-        if (request.getUserId() == null) throw new BadRequestException("User ID is required");
+        if (request == null)
+            throw new BadRequestException("Request body is missing");
+        if (request.getUserId() == null)
+            throw new BadRequestException("User ID is required");
         if (request.getStallIds() == null || request.getStallIds().isEmpty()) {
             throw new BadRequestException("At least one stall ID is required");
         }
 
+        // 1) Get user
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new NotFoundException("User not found: " + request.getUserId()));
 
+        // ✅ 1.5) Enforce MAX 3 stalls per user limit
+        final int MAX_STALLS_PER_USER = 3;
+        long existingStallCount = reservationRepository.countTotalStallsByUserId(request.getUserId());
+        int newStallCount = request.getStallIds().size();
+
+        if (existingStallCount + newStallCount > MAX_STALLS_PER_USER) {
+            long remaining = MAX_STALLS_PER_USER - existingStallCount;
+            if (remaining <= 0) {
+                throw new BadRequestException(
+                        "You have already booked the maximum of " + MAX_STALLS_PER_USER + " stalls. "
+                                + "You cannot book any more stalls.");
+            } else {
+                throw new BadRequestException(
+                        "You can only book " + remaining + " more stall(s). "
+                                + "You currently have " + existingStallCount + " stall(s) booked "
+                                + "and the maximum is " + MAX_STALLS_PER_USER + ".");
+            }
+        }
+
+        // 2) Load stalls once + validate availability
         List<Stall> stalls = new ArrayList<>();
         for (Long stallId : request.getStallIds()) {
             Stall stall = stallRepository.findById(stallId)
@@ -61,12 +99,14 @@ public class ReservationServiceImpl implements ReservationService {
             stalls.add(stall);
         }
 
+        // 3) Create reservation and save first (generates reservation_id)
         Reservation reservation = new Reservation();
         reservation.setUser(user);
         reservation.setQrId(generateQrId());
 
         Reservation savedReservation = reservationRepository.save(reservation);
 
+        // 4) Create reservation_stalls rows + reserve stalls
         List<ReservationStall> joinRows = new ArrayList<>();
 
         for (Stall stall : stalls) {
@@ -74,6 +114,7 @@ public class ReservationServiceImpl implements ReservationService {
             rs.setReservation(savedReservation);
             rs.setStall(stall);
 
+            // ✅ FIX: set composite key explicitly (prevents your NPE)
             rs.setId(new ReservationStallId(savedReservation.getReservationId(), stall.getStallId()));
 
             joinRows.add(reservationStallRepository.save(rs));
@@ -82,10 +123,12 @@ public class ReservationServiceImpl implements ReservationService {
             stallRepository.save(stall);
         }
 
+        // ✅ Keep relationship in memory for correct response counts
         savedReservation.getReservationStalls().clear();
         savedReservation.getReservationStalls().addAll(joinRows);
 
-//        sendReservationConfirmationEmail(user, savedReservation);
+        // 5) Send email
+        sendReservationConfirmationEmail(user, savedReservation);
 
         return DtoMapper.toReservationResponse(savedReservation);
     }
@@ -136,40 +179,39 @@ public class ReservationServiceImpl implements ReservationService {
         return DtoMapper.toReservationResponse(reservation);
     }
 
-//    private void sendReservationConfirmationEmail(User user, Reservation reservation) {
-//        String subject = "Reservation pending - BookFair";
-//
-//        String qrText = reservation.getQrId(); // ✅ encode this (or a URL)
-//
-//        // ✅ Generate PNG bytes
-//        byte[] qrPng = MailServiceImpl.generateQrPng(qrText, 260);
-//
-//        String html = ""
-//                + "<div style='font-family:Arial,sans-serif;line-height:1.5'>"
-//                + "<h2>Reservation Confirmed!</h2>"
-//                + "<p>Hello <b>" + user.getName() + "</b>,</p>"
-//                + "<p>Your reservation is currently pending approval.</p>\n"
-//                + "<ul>"
-//                + "  <li><b>Reservation ID:</b> " + reservation.getReservationId() + "</li>"
-//                + "  <li><b>QR ID:</b> " + reservation.getQrId() + "</li>"
-//                + "  <li><b>Total Stalls:</b> " + reservation.getReservationStalls().size() + "</li>"
-//                + "</ul>"
-//                + "<p><b>Your QR Code:</b></p>"
-//                + "<img src='cid:qrImage' style='width:260px;height:260px;border:1px solid #ddd;padding:8px;border-radius:10px'/>"
-//                + "<p>Please keep this QR code for entry.</p>"
-//                + "<p style='margin-top:24px'>BookFairPro Team</p>"
-//                + "</div>";
-//
-//        // ✅ Send HTML + inline QR image
-//        mailService.sendAndLogHtmlInline(
-//                user,
-//                reservation,
-//                EmailNotification.EmailType.RESERVATION_CONFIRMATION,
-//                subject,
-//                html,
-//                Map.of("qrImage", qrPng)
-//        );
-//    }
+    private void sendReservationConfirmationEmail(User user, Reservation reservation) {
+        String subject = "Reservation pending - BookFair";
+
+        String qrText = reservation.getQrId(); // ✅ encode this (or a URL)
+
+        // ✅ Generate PNG bytes
+        byte[] qrPng = MailServiceImpl.generateQrPng(qrText, 260);
+
+        String html = ""
+                + "<div style='font-family:Arial,sans-serif;line-height:1.5'>"
+                + "<h2>Reservation Confirmed!</h2>"
+                + "<p>Hello <b>" + user.getName() + "</b>,</p>"
+                + "<p>Your reservation is currently pending approval.</p>\n"
+                + "<ul>"
+                + "  <li><b>Reservation ID:</b> " + reservation.getReservationId() + "</li>"
+                + "  <li><b>QR ID:</b> " + reservation.getQrId() + "</li>"
+                + "  <li><b>Total Stalls:</b> " + reservation.getReservationStalls().size() + "</li>"
+                + "</ul>"
+                + "<p><b>Your QR Code:</b></p>"
+                + "<img src='cid:qrImage' style='width:260px;height:260px;border:1px solid #ddd;padding:8px;border-radius:10px'/>"
+                + "<p>Please keep this QR code for entry.</p>"
+                + "<p style='margin-top:24px'>BookFairPro Team</p>"
+                + "</div>";
+
+        // ✅ Send HTML + inline QR image
+        mailService.sendAndLogHtmlInline(
+                user,
+                reservation,
+                EmailNotification.EmailType.RESERVATION_CONFIRMATION,
+                subject,
+                html,
+                Map.of("qrImage", qrPng));
+    }
 
     private void sendReservationCancellationEmail(User user, Reservation reservation) {
         String subject = "Reservation Cancelled - BookFair";

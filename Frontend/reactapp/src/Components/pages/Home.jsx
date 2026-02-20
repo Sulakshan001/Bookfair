@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CheckCircle2, Grid3x3, List, Download } from "lucide-react";
 
 import bookFairImg from "../../assets/img1.jpg.jpeg";
@@ -37,6 +37,17 @@ const cardVariants = {
 /* ---------------- Component ---------------- */
 
 const HomePage = () => {
+  const navigate = useNavigate();
+
+  const handleGetStarted = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/booking");
+    } else {
+      navigate("/sign-in");
+    }
+  };
+
   return (
     <>
       {/* ================= HERO ================= */}
@@ -57,35 +68,35 @@ const HomePage = () => {
             animate="visible"
             className="max-w-2xl"
           >
-           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mt-4">
-    Smart Stall Reservation System for{" "}
-    <span className="text-blue-300">Colombo International Book Fair 2026</span>
-  </h1>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mt-4">
+              Smart Stall Reservation System for{" "}
+              <span className="text-blue-300">Colombo International Book Fair 2026</span>
+            </h1>
 
-  {/* 📅 Event Date & Venue – new addition */}
-  <div className="mt-6 space-y-1 border-l-4 border-blue-900 pl-4">
-    <p className="text-lg sm:text-xl font-semibold text-white">
-      25th October – 4th November 2026
-    </p>
-    <p className="text-base sm:text-lg text-gray-100">
-      Bandaranaike Memorial International Conference Hall – BMICH
-    </p>
-    <p className="text-sm sm:text-base text-gray-200">
-      Bauddhaloka Mawatha, Colombo 07, Sri Lanka.
-    </p>
-  </div>
+            {/* 📅 Event Date & Venue – new addition */}
+            <div className="mt-6 space-y-1 border-l-4 border-blue-900 pl-4">
+              <p className="text-lg sm:text-xl font-semibold text-white">
+                25th October – 4th November 2026
+              </p>
+              <p className="text-base sm:text-lg text-gray-100">
+                Bandaranaike Memorial International Conference Hall – BMICH
+              </p>
+              <p className="text-sm sm:text-base text-gray-200">
+                Bauddhaloka Mawatha, Colombo 07, Sri Lanka.
+              </p>
+            </div>
 
             <p className="mt-4 text-gray-200">
-             The Colombo International Book Fair (CIBF) has evolved into Sri Lanka’s most anticipated cultural and literary event, drawing passionate readers, seasoned writers, creative illustrators, pioneering publishers, and the general public into a single, vibrant space that celebrates the written word.
+              The Colombo International Book Fair (CIBF) has evolved into Sri Lanka’s most anticipated cultural and literary event, drawing passionate readers, seasoned writers, creative illustrators, pioneering publishers, and the general public into a single, vibrant space that celebrates the written word.
             </p>
 
             <div className="flex gap-4 mt-6">
-              <Link
-                to="/sign-up"
-                className="px-5 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition"
+              <button
+                onClick={handleGetStarted}
+                className="px-5 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition text-white font-medium cursor-pointer"
               >
                 Get Started
-              </Link>
+              </button>
 
               <Link
                 to="/about"

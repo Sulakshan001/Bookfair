@@ -4,16 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e11df472-b1ff-4d0a-bedf-accc0904c9f6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/controller/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/dto/stall/StallResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/dto/stall/StallResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/mapper/DtoMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/mapper/DtoMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/service/AdminService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/service/AdminService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/service/AdminServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/service/AdminServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/src/Components/Adminpages/AdminReservertion.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/src/Components/Adminpages/AdminReservertion.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/src/Components/Adminpages/Adminstalls.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/src/Components/Adminpages/Adminstalls.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/src/services/Admin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/src/services/Admin.jsx" afterDir="false" />
+    <list default="true" id="12c2dad1-35e0-4c53-a802-9a16e10e659f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/repository/ReservationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/repository/ReservationRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/service/CheckoutServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/service/CheckoutServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/service/ReservationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Book-Fair-Project/src/main/java/com/example/Book_Fair_Project/service/ReservationServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/reactapp/src/Components/pages/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/reactapp/src/Components/pages/Home.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -4,9 +4,14 @@ package com.example.Book_Fair_Project.repository;
 
 import com.example.Book_Fair_Project.model.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     List<Reservation> findByUser_UserId(Long userId);
+
+    @Query("SELECT COUNT(rs) FROM ReservationStall rs WHERE rs.reservation.user.userId = :userId")
+    long countTotalStallsByUserId(@Param("userId") Long userId);
 }
